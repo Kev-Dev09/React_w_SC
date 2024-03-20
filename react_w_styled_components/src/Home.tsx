@@ -1,8 +1,8 @@
 import React from 'react'
 import styled from "styled-components";
-import Featured from './Featured';
-import SmWidget from './SmWidget';
 import LgWidget from './LgWidget';
+import Table from "./datatable/table";
+import { dummyTableData } from './dummyData';
 
 const HomeContainer = styled.div`
     flex: 4;
@@ -17,7 +17,7 @@ const Home = () => {
     return (
         <HomeContainer>
             <HomeWidgets>
-                <LgWidget />
+                <Table rows = {dummyTableData}/>
             </HomeWidgets>
         </HomeContainer>
     )
