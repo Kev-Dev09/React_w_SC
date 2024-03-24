@@ -1,7 +1,12 @@
 export type Data = {
     id: number
-    name: string
-    company: string
-    active: boolean
-    country: string
+    firstname: string
+    lastname: string
+}[]
+
+export type Response = {
+    users: []
+    total:number
+    skip:number
+    limit:number
 }[]
