@@ -10,9 +10,9 @@ function App() {
   return (
       <>
       <Router>
-          <NavBar />
+          {/*<NavBar />*/}
           <div className="container">
-              <SideBar />
+              {/*<SideBar />} */}
               <Switch>
                   <Route exact path="/">
                   <Home />

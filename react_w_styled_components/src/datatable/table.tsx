@@ -52,6 +52,11 @@ cursor: pointer;
 padding: 5px 10px;
 `
 
+const PaginationButtonContainer = styled.div`
+display: 'flex';
+justifyContent: 'flex-end'
+`
+
 export type TableProps = {
     rows: Data
 }
@@ -73,20 +78,16 @@ const Table = ({ rows }: TableProps) => {
                 })
                 ])
             } else {
-                setRows(rows)
+                setRows(rows.slice(0,take))
             }
         }
 
         const changePage = (page: number) => {
-            setPage(page);
-            console.log("HELLO");
-            console.log(page*take)
-            console.log((page*take)+10);
-            console.log(rows.slice(skip*take, take*page));
+            setPage(page)
             setRows(rows.slice(page*take, (page*take)+10));
         }
 
-        const sort = (value: keyof Data[0], order: string) => {
+        const sort = (value, order: string) => {
             console.log(value);
             const returnValue = order === 'desc' ? 1 : -1
 
@@ -103,6 +104,15 @@ const Table = ({ rows }: TableProps) => {
             setOrder(updatedOrder)
             //sort(sortKey as keyof Data[0], updatedOrder)
         }
+
+        const getButtonsUsingMap = () => {
+            const array = [1, 2, 3 ,4, 5]
+        
+            return array.map((number) => {
+              return <button>{number}</button>
+            })
+        
+          }
 
         return (
             <>
@@ -121,7 +131,7 @@ const Table = ({ rows }: TableProps) => {
                         <DataTableHead>
                             <TableTR>
                                 {Object.keys(rows[1]).map((entry, index) => (
-                                    <th onClick={() => sort(entry as keyof Data[0], order)} key={index}>{entry}</th>
+                                    <th onClick={() => sort(entry, order)} key={index}>{entry}</th>
                                 ))}
                             </TableTR>
                         </DataTableHead>
@@ -138,13 +148,14 @@ const Table = ({ rows }: TableProps) => {
                     {sortedRows.length === 0 && (
                         <h1>No results found...</h1>
                     )}
-                    <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                    <PaginationButtonContainer>
                         <ButtonStyle onClick={()=>changePage(page-1)}>Prev</ButtonStyle>
+                        {getButtonsUsingMap}
                         <ButtonStyle onClick={()=>changePage(0)}>1</ButtonStyle>
                         <ButtonStyle onClick={()=>changePage(1)}>2</ButtonStyle>
                         <ButtonStyle onClick={()=>changePage(2)}>3</ButtonStyle>
                         <ButtonStyle onClick={()=>changePage(page+1)}>Next</ButtonStyle>
-                    </div>
+                    </PaginationButtonContainer>
                 </div>
 
             </>
