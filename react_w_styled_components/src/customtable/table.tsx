@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import useTable from "../hooks/useTable";
 import styles from "./Table.module.css";
 import TableFooter from "./tableFooter";
+import { Button } from "@material-ui/core";
 
 const Table = ({ data, rowsPerPage}: {data: any, rowsPerPage: number}) => {
     const [page, setPage] = useState(1);

@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import styled from "styled-components";
 import LgWidget from './LgWidget';
 import Table from "./customtable/table";
+import WorkingTable from './datatable/table';
 import { Data } from './datatable/types'
 import { render } from "react-dom";
 
@@ -43,7 +44,7 @@ const Home = () => {
     return (
         <HomeContainer>
             <HomeWidgets>
-                {tableData.length > 0 ?  <Table data={tableData} rowsPerPage={5} /> : <h1>Hello</h1>}
+                {tableData.length > 0 ?  <WorkingTable rows={tableData} /> : <h1>Hello</h1>}
             </HomeWidgets>
         </HomeContainer>
     )
