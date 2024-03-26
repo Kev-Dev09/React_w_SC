@@ -43,7 +43,7 @@ const Home = () => {
     return (
         <HomeContainer>
             <HomeWidgets>
-                {tableData.length > 0 ?  <Table data={tableData} rowsPerPage={4} /> : <h1>Hello</h1>}
+                {tableData.length > 0 ?  <Table data={tableData} rowsPerPage={5} /> : <h1>Hello</h1>}
             </HomeWidgets>
         </HomeContainer>
     )
