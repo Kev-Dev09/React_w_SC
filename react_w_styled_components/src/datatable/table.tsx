@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Data } from './types'
 import { styled, css } from 'styled-components';
 import { Button } from '@material-ui/core';
+import Footer from './footer';
 const DataTable = styled.table`
 width:100%;
 border-collapse:collapse;
@@ -63,56 +64,45 @@ export type TableProps = {
 
 const Table = ({ rows }: TableProps) => {
     if (rows.length > 0) {
-        const [skip, setSkip] = useState(1);
         const [take, setTake] = useState(10);
         const [page, setPage] = useState(1);
-        const [sortedRows, setRows] = useState(rows.slice(0, take))
+        const [sortedRows, setRows] = useState(rows)
+        const [visibleRows, setVisibleRows] = useState(rows.slice(0, take));
         const [order, setOrder] = useState('asc')
         const [sortKey, setSortKey] = useState(Object.keys(rows[0])[0])
 
         const filter = (event: React.ChangeEvent<HTMLInputElement>) => {
-            const value = event.target.value.toLowerCase();
+            const value = event.target.value.toLowerCase().normalize('NFD').replace(/\p{Diacritic}/gu, '');
             if (value) {
-                setRows([...rows.filter(row => {
-                    return Object.values(row).join('').toLowerCase().includes(value)
+                setVisibleRows([...sortedRows.filter(row => {
+                    return Object.values(row).join('').toLowerCase().normalize('NFD').replace(/\p{Diacritic}/gu, '').includes(value)
                 })
                 ])
             } else {
-                setRows(rows.slice(0,take))
+                setVisibleRows(sortedRows.slice(0, take))
             }
         }
 
         const changePage = (page: number) => {
             setPage(page)
-            setRows(rows.slice(page*take, (page*take)+10));
+            setVisibleRows(sortedRows.slice(page * take, (page * take) + 10));
         }
 
         const sort = (value, order: string) => {
             console.log(value);
             const returnValue = order === 'desc' ? 1 : -1
-
-            setSortKey(value)
             setRows([...sortedRows.sort((a, b) => {
                 updateOrder();
                 return a[value] > b[value] ? returnValue * -1 : returnValue
             })
             ])
+            changePage(0)
         }
 
         const updateOrder = () => {
             const updatedOrder = order === 'asc' ? 'desc' : 'asc'
             setOrder(updatedOrder)
-            //sort(sortKey as keyof Data[0], updatedOrder)
         }
-
-        const getButtonsUsingMap = () => {
-            const array = [1, 2, 3 ,4, 5]
-        
-            return array.map((number) => {
-              return <button>{number}</button>
-            })
-        
-          }
 
         return (
             <>
@@ -136,7 +126,7 @@ const Table = ({ rows }: TableProps) => {
                             </TableTR>
                         </DataTableHead>
                         <tbody>
-                            {sortedRows.map((row, index) => (
+                            {visibleRows.map((row, index) => (
                                 <TableTR key={index}>
                                     {Object.values(row).map((entry, columnIndex) => (
                                         <TableTD key={columnIndex}>{entry}</TableTD>
@@ -145,17 +135,10 @@ const Table = ({ rows }: TableProps) => {
                             ))}
                         </tbody>
                     </DataTable>
+                    <Footer changePage={changePage} dataLength={rows.length} pageLength={take} />
                     {sortedRows.length === 0 && (
                         <h1>No results found...</h1>
                     )}
-                    <PaginationButtonContainer>
-                        <ButtonStyle onClick={()=>changePage(page-1)}>Prev</ButtonStyle>
-                        {getButtonsUsingMap}
-                        <ButtonStyle onClick={()=>changePage(0)}>1</ButtonStyle>
-                        <ButtonStyle onClick={()=>changePage(1)}>2</ButtonStyle>
-                        <ButtonStyle onClick={()=>changePage(2)}>3</ButtonStyle>
-                        <ButtonStyle onClick={()=>changePage(page+1)}>Next</ButtonStyle>
-                    </PaginationButtonContainer>
                 </div>
 
             </>

@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 
-import styles from "./TableFooter.module.css";
+import styles from "../datatable/TableFooter.module.css";
 
 const TableFooter = ({ range, setPage, page, slice }) => {
   useEffect(() => {

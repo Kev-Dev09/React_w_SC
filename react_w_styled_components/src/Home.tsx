@@ -34,6 +34,11 @@ const Home = () => {
                     tmp1 = {} as Data;
                 };
                 tmp = tmp.slice(1);
+                tmp1.id = 67563422;
+                tmp1.firstname = "Őllé";
+                tmp1.lastname = "Kévín";
+                tmp.push(tmp1);
+                tmp1 = {} as Data;
                 setTableData(tmp);
                 setLoading(false);
             }, [])
