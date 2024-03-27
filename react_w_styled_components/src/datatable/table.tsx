@@ -57,24 +57,19 @@ const PaginationButtonContainer = styled.div`
 display: 'flex';
 justifyContent: 'flex-end'
 `
-
-export type TableProps = {
-    rows: Data
-}
-
-const Table = ({ rows }: TableProps) => {
+const Table = ({rows, headerData}) => {
     if (rows.length > 0) {
-        const [take, setTake] = useState(10);
-        const [page, setPage] = useState(1);
-        const [sortedRows, setRows] = useState(rows)
-        const [visibleRows, setVisibleRows] = useState(rows.slice(0, take));
-        const [order, setOrder] = useState('asc')
-        const [sortKey, setSortKey] = useState(Object.keys(rows[0])[0])
+        const [take, setTake] = useState<number>(10);
+        const [page, setPage] = useState<number>(1);
+        const [sortedRows, setRows] = useState<any>(rows)
+        const [visibleRows, setVisibleRows] = useState<any>(rows.slice(0, take));
+        const [order, setOrder] = useState<string>('asc')
+        const [sortKey, setSortKey] = useState<string>(Object.keys(rows[0])[0])
 
         const filter = (event: React.ChangeEvent<HTMLInputElement>) => {
             const value = event.target.value.toLowerCase().normalize('NFD').replace(/\p{Diacritic}/gu, '');
             if (value) {
-                setVisibleRows([...sortedRows.filter(row => {
+                setVisibleRows([...sortedRows.filter((row: any) => {
                     return Object.values(row).join('').toLowerCase().normalize('NFD').replace(/\p{Diacritic}/gu, '').includes(value)
                 })
                 ])
@@ -88,10 +83,10 @@ const Table = ({ rows }: TableProps) => {
             setVisibleRows(sortedRows.slice(page * take, (page * take) + 10));
         }
 
-        const sort = (value, order: string) => {
+        const sort = (value: string, order: string) => {
             console.log(value);
             const returnValue = order === 'desc' ? 1 : -1
-            setRows([...sortedRows.sort((a, b) => {
+            setRows([...sortedRows.sort((a: any, b: any) => {
                 updateOrder();
                 return a[value] > b[value] ? returnValue * -1 : returnValue
             })
@@ -120,13 +115,13 @@ const Table = ({ rows }: TableProps) => {
                     <DataTable>
                         <DataTableHead>
                             <TableTR>
-                                {Object.keys(rows[1]).map((entry, index) => (
-                                    <th onClick={() => sort(entry, order)} key={index}>{entry}</th>
+                                {Object.keys(rows[1]).map((entry: any, index: number) => (
+                                    <th onClick={() => sort(entry, order)} key={index}>{headerData[index]}</th>
                                 ))}
                             </TableTR>
                         </DataTableHead>
                         <tbody>
-                            {visibleRows.map((row, index) => (
+                            {visibleRows.map((row: any, index: number) => (
                                 <TableTR key={index}>
                                     {Object.values(row).map((entry, columnIndex) => (
                                         <TableTD key={columnIndex}>{entry}</TableTD>
@@ -150,4 +145,4 @@ const Table = ({ rows }: TableProps) => {
     }
 }
 
-export default Table
+export default Table;
